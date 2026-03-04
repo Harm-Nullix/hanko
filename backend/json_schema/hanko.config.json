@@ -230,6 +230,10 @@
           "title": "secrets",
           "description": "`secrets` configures the keys used for cryptographically signing tokens issued by the API."
         },
+        "security_notifications": {
+          "$ref": "#/$defs/SecurityNotifications",
+          "description": "`security_notifications` configures security notifications for important security-related events."
+        },
         "server": {
           "$ref": "#/$defs/Server",
           "title": "server",
@@ -787,6 +791,11 @@
           "description": "`device_trust_duration` configures the duration a device remains trusted after authentication; once expired, the\nuser must reauthenticate with MFA.",
           "default": "720h"
         },
+        "device_trust_max_users_per_device": {
+          "type": "integer",
+          "description": "`device_trust_max_users_per_device` limits how many users can have device trust on a single device/browser.\nOldest entries are removed when the limit is exceeded. This allows multiple users to trust the same device\nwithout overwriting each other's trust tokens.",
+          "default": 20
+        },
         "device_trust_policy": {
           "type": "string",
           "enum": [
@@ -1293,6 +1302,52 @@
       "required": [
         "enabled"
       ]
+    },
+    "SecurityNotificationConfiguration": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "SecurityNotificationTypes": {
+      "properties": {
+        "password_update": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "primary_email_update": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "email_create": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "email_delete": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "passkey_create": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "mfa_create": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        },
+        "mfa_delete": {
+          "$ref": "#/$defs/SecurityNotificationConfiguration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "SecurityNotifications": {
+      "properties": {
+        "notifications": {
+          "$ref": "#/$defs/SecurityNotificationTypes"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "Server": {
       "properties": {
